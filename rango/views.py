@@ -20,7 +20,10 @@ def index(request):
     return render(request, 'rango/index.html', context=context_dict)
 
 def about(request):
-    return render(request, 'rango/about.html')
+    print(request.method)
+    print(request.user)
+
+    return render(request, 'rango/about.html', {})
 
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
@@ -65,7 +68,7 @@ def add_category(request):
 
         # If valid form is submitted, save the form to the database.
         if form.is_valid():
-            form.save(commit=True)
+            category = form.save(commit=True)
             print(category, category.slug)
             
             # Now send the user back to the index page.
@@ -94,7 +97,7 @@ def add_page(request, category_name_slug):
                 page.category = category
                 page.views = 0
                 page.save()
-                return show_category(request, category_name_slug)
+            return show_category(request, category_name_slug)
         else:
             print(form.errors)
     
